@@ -722,7 +722,7 @@ class NostalgiaForInfinityX6(IStrategy):
         if nfi_param in ['long_entry_signal_params','short_entry_signal_params']:
           continue
         if (nfi_param in NFI_SAFE_PARAMETERS or is_config_advanced_mode) and hasattr(self, nfi_param):
-          log.info(f"Parameter {nfi_param} changed from {getattr(self,nfi_param)} to {self.config['nfi_parameters'][nfi_param]}.")
+          log.info(f'Parameter {nfi_param} changed from "{getattr(self,nfi_param)}" to "{self.config['nfi_parameters'][nfi_param]}".')
           setattr(self, nfi_param, self.config['nfi_parameters'][nfi_param])
         else:
           log.warning(f'Invalid or unsafe parameter: {nfi_param}.')
