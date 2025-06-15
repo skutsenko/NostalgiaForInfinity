@@ -12,8 +12,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install black==23.7.0
       - id: changed-files
+        name: Check changed files
         uses: dorny/paths-filter@v3
         with:
           token: ${{ github.token }}
@@ -54,7 +54,7 @@ jobs:
           # - 20250801-20250901
           # - 20250701-20250801
           # - 20250601-20250701
-          # - 20250501-20250601
+          - 20250501-20250601
           - 20250401-20250501
           - 20250301-20250401
           - 20250201-20250301
@@ -202,6 +202,7 @@ jobs:
             --branch=main \
             --workflow=tests.yml \
             --exchange=kucoin \
+            --tradingmode=spot \
             --name=kucoin-spot-testrun-artifacts downloaded-results
 
       - name: Download Previous Binance Spot CI Artifacts
@@ -213,6 +214,7 @@ jobs:
             --branch=main \
             --workflow=tests.yml \
             --exchange=binance \
+            --tradingmode=spot \
             --name=binance-spot-testrun-artifacts downloaded-results
 
       - name: Download Previous Binance Futures CI Artifacts
@@ -224,6 +226,7 @@ jobs:
             --branch=main \
             --workflow=tests.yml \
             --exchange=binance \
+            --tradingmode=futures \
             --name=binance-futures-testrun-artifacts downloaded-results
 
       - name: Download Current Binance Futures CI Artifacts
@@ -266,6 +269,7 @@ jobs:
           find downloaded-results/ -type f -iname *.txt -exec sed -i 's/DAY BREAKDOWN/\n## DAY BREAKDOWN\n/g' {} +
           find downloaded-results/ -type f -iname *.txt -exec sed -i 's/SUMMARY METRICS/\n## SUMMARY METRICS\n/g' {} +
           find downloaded-results/ -type f -iname *.txt -exec sed -i 's/STRATEGY SUMMARY/\n## STRATEGY SUMMARY\n/g' {} +
+          tree
 
       - name: Comment CI Results
         env:

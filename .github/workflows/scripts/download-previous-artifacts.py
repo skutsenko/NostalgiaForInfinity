@@ -48,10 +48,12 @@ def download_previous_artifacts(repo, options):
     reports_info = {}
   if options.exchange not in reports_info:
     reports_info[options.exchange] = {}
+  if options.tradingmode not in reports_info[options.exchange]:
+    reports_info[options.exchange][options.tradingmode] = {}
   for name, (sha, url) in runs.items():
     if not url:
       print(f"Did not find a download url for {name}", file=sys.stderr, flush=True)
-      reports_info[options.exchange][name] = {
+      reports_info[options.exchange][options.tradingmode][name] = {
         "sha": sha,
         "path": str(options.path / "current"),
       }
@@ -74,7 +76,7 @@ def download_previous_artifacts(repo, options):
         outdir.mkdir()
       zipfile.ZipFile(outfile).extractall(path=outdir)
       outfile.unlink()
-      reports_info[options.exchange][name] = {"sha": sha, "path": str(outdir.resolve())}
+      reports_info[options.exchange][options.tradingmode][name] = {"sha": sha, "path": str(outdir.resolve())}
   reports_info_path.write_text(json.dumps(reports_info))
 
 
@@ -91,6 +93,7 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument("--repo", required=True, help="The Organization Repository")
   parser.add_argument("--exchange", required=True, help="The exchange name")
+  parser.add_argument("--tradingmode", required=True, help="The trading mode")
   parser.add_argument("--name", required=True, help="The artifacts name to get")
   parser.add_argument(
     "--workflow",
